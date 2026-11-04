@@ -18,22 +18,23 @@ An on-device, standalone e-paper noticeboard for a jailbroken Kindle. Scan its Q
 - 余白帯の上下幅、写真の階調表現を調整。
 - 自動スリープをKindle標準／5秒／30秒／1分／3分／5分から選択。
 - 起きている間だけQRとWi-Fi・バッテリー・終了アイコンを表示。スリープ中は掲示内容だけを残す。
+- Wi-Fi未接続でも前回保存した掲示画像で起動。接続すると編集用QRを自動更新。
 
 ## 対応・必要なもの
 
 **実機確認済み：Kindle Paperwhite 4（第10世代）、FW 5.18.1.1.1、1072×1448、ARMv7 KindleHF。**
 
 - 脱獄済みで、ライブラリから `.sh` Scriptletを開ける環境が必要です（SH_Integration対応のhotfix等）。この配布物に脱獄ツールは含みません。
-- Kindleと操作端末が同じWi-Fiに接続され、端末同士の通信が許可されていること。スマホのテザリングでも利用できます。
+- 書き換えるときはKindleと操作端末が同じWi-Fiに接続され、端末同士の通信が許可されていること。保存済みの掲示表示にはWi-Fiは不要です。スマホのテザリングでも利用できます。
 - 他のモデル・ファームウェアは未検証です。現行の起動スクリプトはPW4の解像度を前提にしています。
 
 ## インストール
 
-1. [Releases](https://github.com/UroCo-lab/OKIGAMI/releases/latest)から **`OKIGAMI-0.6.0-kindlehf.zip`** をダウンロードして展開します。GitHubの「Source code」ZIPは開発用です。
+1. [Releases](https://github.com/UroCo-lab/OKIGAMI/releases/latest)から **`OKIGAMI-0.6.1-kindlehf.zip`** をダウンロードして展開します。GitHubの「Source code」ZIPは開発用です。
 2. KindleをUSBでPCにつなぎます。
 3. 展開した **`Kindle-USB` の中身**をKindleドライブの直下へコピーします。`documents` と `kindle-board` がドライブ直下に並ぶ状態です。
-4. 安全に取り外し、USBを抜きます。KindleをWi-Fiへ接続し、ライブラリの **OKIGAMI** を開きます。
-5. 本体左下のQRをスマホで読み、文字または画像を編集して「Kindleに表示する」を押します。
+4. 安全に取り外し、USBを抜いてライブラリの **OKIGAMI** を開きます。未接続なら前回の掲示画像を表示します。
+5. 書き換えるときはKindleをWi-Fiへ接続し、本体左下のQRをスマホで読んで「Kindleに表示する」を押します。
 
 ```text
 Kindleドライブ/

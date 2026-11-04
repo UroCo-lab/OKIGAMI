@@ -7,6 +7,8 @@ import (
 	"image/draw"
 	"image/png"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 
 	qrcode "github.com/skip2/go-qrcode"
@@ -23,13 +25,30 @@ func (b *board) ensureConnectionQR() error {
 	if url == "" {
 		url = "http://127.0.0.1:8080/#" + b.token
 	}
-	if b.hook != "" {
-		port := "8080"
-		if parts := strings.Split(strings.Split(url, "/#")[0], ":"); len(parts) > 2 {
-			port = parts[len(parts)-1]
+	if b.hook != "" || b.lookupIP != nil {
+		port := b.listenPort
+		if port == "" {
+			port = "8080"
+			if parts := strings.Split(strings.Split(url, "/#")[0], ":"); len(parts) > 2 {
+				port = parts[len(parts)-1]
+			}
 		}
-		if ip := localIP(); ip != "127.0.0.1" {
-			url = "http://" + net.JoinHostPort(ip, port) + "/#" + b.token
+		lookup := b.lookupIP
+		if lookup == nil {
+			lookup = localIP
+		}
+		ip := net.ParseIP(lookup())
+		if ip == nil || ip.IsLoopback() || ip.IsUnspecified() {
+			// No reachable address: never offer a localhost or stale connection QR.
+			changed := b.url != "" || b.qrURL != "" || b.smallQR != nil
+			b.url, b.qrURL = "", ""
+			b.qrCode, b.smallQR, b.smallQRPNG = nil, nil, nil
+			if changed {
+				return os.WriteFile(filepath.Join(b.dir, "connection.txt"), nil, 0600)
+			}
+			return nil
+		} else {
+			url = "http://" + net.JoinHostPort(ip.String(), port) + "/#" + b.token
 		}
 	}
 	if b.smallQR != nil && b.qrURL == url {
@@ -52,6 +71,9 @@ func (b *board) ensureConnectionQR() error {
 	draw.Draw(qr, image.Rectangle{Min: at, Max: at.Add(encoded.Bounds().Size())}, encoded, encoded.Bounds().Min, draw.Src)
 	var data bytes.Buffer
 	if err = png.Encode(&data, qr); err != nil {
+		return err
+	}
+	if err = os.WriteFile(filepath.Join(b.dir, "connection.txt"), []byte(url+"\n"), 0600); err != nil {
 		return err
 	}
 	b.url = url

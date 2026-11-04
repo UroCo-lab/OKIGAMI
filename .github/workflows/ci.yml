@@ -20,6 +20,7 @@ jobs:
       - run: go -C src vet ./...
       - run: node verify-crop.cjs && node verify-connection.cjs && node verify-caption-anchor.cjs
       - run: find device vendor/custom-screensaver -name '*.sh' -print0 | xargs -0 -n1 sh -n
+      - run: python3 scripts/test-offline-launcher.py
   package:
     runs-on: windows-latest
     steps:

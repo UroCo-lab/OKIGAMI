@@ -57,6 +57,9 @@ func writePNG(path string, img image.Image) error {
 }
 
 func (b *board) compose(src image.Image, sleeping bool) *image.Gray {
+	if b.smallQR == nil {
+		return composeToolbar(src, sleeping, true, false, readDeviceStatus())
+	}
 	return composeToolbar(src, sleeping, true, false, readDeviceStatus(), b.smallQR)
 }
 func (b *board) writeSleepFrame(logical image.Image) error {

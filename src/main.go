@@ -37,6 +37,8 @@ var editor []byte
 type board struct {
 	mu                             sync.Mutex
 	token, dir, hook, url          string
+	listenPort                     string
+	lookupIP                       func() string
 	width, height                  int
 	shutdown                       func()
 	landscape, showingQR, sleeping bool
@@ -102,7 +104,7 @@ func (b *board) handler() http.Handler {
 			b.mu.Lock()
 			defer b.mu.Unlock()
 			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(map[string]any{"width": b.width, "height": b.height, "version": "0.6.0", "device": "Kindle Paperwhite 4", "sleeping": b.sleeping, "landscape": b.landscape, "preview": b.hook == "", "autoHide": b.autoHide, "barVisible": b.barVisible, "sleepAfterSeconds": b.sleepAfterSeconds, "status": readDeviceStatus()})
+			_ = json.NewEncoder(w).Encode(map[string]any{"width": b.width, "height": b.height, "version": "0.6.1", "device": "Kindle Paperwhite 4", "sleeping": b.sleeping, "landscape": b.landscape, "preview": b.hook == "", "autoHide": b.autoHide, "barVisible": b.barVisible, "sleepAfterSeconds": b.sleepAfterSeconds, "status": readDeviceStatus()})
 		case r.URL.Path == "/api/current" && r.Method == "GET":
 			b.mu.Lock()
 			defer b.mu.Unlock()
@@ -118,6 +120,10 @@ func (b *board) handler() http.Handler {
 			defer b.mu.Unlock()
 			if err := b.ensureConnectionQR(); err != nil {
 				http.Error(w, "QRコードを準備できませんでした。", 500)
+				return
+			}
+			if b.smallQR == nil {
+				http.Error(w, "KindleをWi-Fiへ接続してください。", http.StatusServiceUnavailable)
 				return
 			}
 			w.Header().Set("Content-Type", "image/png")
@@ -339,15 +345,24 @@ func (b *board) makeQR() error {
 	}
 	img := image.NewGray(image.Rect(0, 0, w, h))
 	draw.Draw(img, img.Bounds(), image.NewUniform(color.White), image.Point{}, draw.Src)
-	size := min(w, h) * 3 / 4
-	qr := b.qrCode.Image(size)
-	at := image.Pt((w-size)/2, (h-size-100)/2)
-	draw.Draw(img, image.Rectangle{Min: at, Max: at.Add(qr.Bounds().Size())}, qr, image.Point{}, draw.Src)
+	if b.qrCode != nil {
+		size := min(w, h) * 3 / 4
+		qr := b.qrCode.Image(size)
+		at := image.Pt((w-size)/2, (h-size-100)/2)
+		draw.Draw(img, image.Rectangle{Min: at, Max: at.Add(qr.Bounds().Size())}, qr, image.Point{}, draw.Src)
+	} else {
+		label, err := png.Decode(bytes.NewReader(offlineLabel))
+		if err != nil {
+			return err
+		}
+		at := image.Pt((w-label.Bounds().Dx())/2, (h-label.Bounds().Dy())/2)
+		draw.Draw(img, image.Rectangle{Min: at, Max: at.Add(label.Bounds().Size())}, label, label.Bounds().Min, draw.Src)
+	}
 	f, err := os.Create(filepath.Join(b.dir, "qr.png"))
 	if err != nil {
 		return err
 	}
-	err = png.Encode(f, rotateToPortrait(composeToolbar(img, false, true, false, readDeviceStatus(), b.smallQR), b.landscape))
+	err = png.Encode(f, rotateToPortrait(b.compose(img, false), b.landscape))
 	closeErr := f.Close()
 	if err != nil {
 		return err
@@ -398,7 +413,7 @@ func main() {
 	if _, err = strconv.Atoi(port); err != nil {
 		log.Fatal(err)
 	}
-	b := &board{barVisible: true, token: token, dir: absolute, hook: *hook, width: *width, height: *height, url: "http://" + net.JoinHostPort(*publicIP, port) + "/#" + token}
+	b := &board{barVisible: true, token: token, dir: absolute, hook: *hook, listenPort: port, width: *width, height: *height, url: "http://" + net.JoinHostPort(*publicIP, port) + "/#" + token}
 	if orientation, e := os.ReadFile(filepath.Join(absolute, "orientation.txt")); e == nil {
 		b.landscape = strings.TrimSpace(string(orientation)) == "landscape"
 	}
@@ -445,9 +460,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err = os.WriteFile(filepath.Join(absolute, "connection.txt"), []byte(b.url+"\n"), 0600); err != nil {
-		log.Fatal(err)
-	}
 	initialAction, initialPath := "qr", filepath.Join(absolute, "qr.png")
 	if b.content != nil {
 		b.showingQR = false
@@ -468,7 +480,7 @@ func main() {
 	b.watchPower(ctx)
 	b.watchStatus(ctx)
 	b.watchAutoSleep(ctx)
-	log.Printf("OKIGAMI 0.6.0 listening on %s; connection QR ready (%dx%d)", *addr, *width, *height)
+	log.Printf("OKIGAMI 0.6.1 listening on %s; display ready (%dx%d)", *addr, *width, *height)
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 	defer signal.Stop(signals)

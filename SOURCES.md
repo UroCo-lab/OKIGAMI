@@ -1,6 +1,6 @@
 # Native helper source and build inputs
 
-OKIGAMI 0.6.0 bundles the unmodified `fbink_hf`, `screensaver_draw`, and `screensaver_shield` executables from:
+OKIGAMI 0.6.1 bundles the unmodified `fbink_hf`, `screensaver_draw`, and `screensaver_shield` executables from:
 
 - Release: <https://github.com/chengandre/kindle-custom-screensaver/releases/tag/v0.6.0>
 - Original asset: `custom-screensaver-0.6.0-kindlehf.zip`
@@ -12,7 +12,7 @@ OKIGAMI 0.6.0 bundles the unmodified `fbink_hf`, `screensaver_draw`, and `screen
 
 ## Source archive
 
-Download [OKIGAMI-0.6.0-third-party-sources.zip](https://github.com/UroCo-lab/OKIGAMI/releases/download/v0.6.0/OKIGAMI-0.6.0-third-party-sources.zip) from the same Release as the application. It contains:
+Download [OKIGAMI-0.6.1-third-party-sources.zip](https://github.com/UroCo-lab/OKIGAMI/releases/download/v0.6.1/OKIGAMI-0.6.1-third-party-sources.zip) from the same Release as the application. It contains:
 
 - The full Kindle Custom Screensaver project source and its upstream workflow/build scripts.
 - The full pinned FBInk source, populated with the submodules used by its Kindle `strip` build:

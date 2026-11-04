@@ -15,6 +15,9 @@ import (
 //go:embed assets/loading-label.png
 var loadingLabel []byte
 
+//go:embed assets/offline-label.png
+var offlineLabel []byte
+
 func (b *board) writeLoadingFrame() (string, error) {
 	label, err := png.Decode(bytes.NewReader(loadingLabel))
 	if err != nil {

@@ -19,6 +19,6 @@ The release package preserves Kindle Custom Screensaver's `LICENSE`, `THIRD_PART
 
 ## Corresponding source for bundled native helpers
 
-[SOURCES.md](SOURCES.md) identifies the exact revisions and build inputs. The fixed source snapshots, the FBInk submodule source used by the Kindle build, and upstream build scripts are provided as **`OKIGAMI-0.6.0-third-party-sources.zip`** in the [same release](https://github.com/UroCo-lab/OKIGAMI/releases/tag/v0.6.0).
+[SOURCES.md](SOURCES.md) identifies the exact revisions and build inputs. The fixed source snapshots, the FBInk submodule source used by the Kindle build, and upstream build scripts are provided as **`OKIGAMI-0.6.1-third-party-sources.zip`** in the [same release](https://github.com/UroCo-lab/OKIGAMI/releases/tag/v0.6.1).
 
 Do not treat the repository's MIT-0 license as permission to remove third-party license requirements from redistributed bundles.

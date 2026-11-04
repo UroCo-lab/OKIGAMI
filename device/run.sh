@@ -51,7 +51,7 @@ case "${1:-start}" in
         ;;
     worker)
         echo $$ > "$WORKER_PID"
-        echo 'KINDLE_BOARD_START_0.6.0'
+        echo 'KINDLE_BOARD_START_0.6.1'
         date -u
         uname -srmo
         id -u
@@ -70,16 +70,12 @@ case "${1:-start}" in
         disable_original_renderers || exit 1
         IP="$(ifconfig wlan0 2>/dev/null | sed -n 's/.*inet addr:\([0-9.]*\).*/\1/p' | head -n 1)"
         if [ -z "$IP" ]; then
-            "$BASE/ss/bin/fbink_hf" -p -m -M -S 3 -B WHITE -C BLACK -w 'Connect Kindle to Wi-Fi, then open OKIGAMI again.'
-            sleep 3
-            xrefresh
-            exit 1
+            log 'Starting offline with saved content; receiver waits for Wi-Fi'
         fi
         if iptables -I INPUT -i wlan0 -p tcp --dport 8080 -j ACCEPT; then
             touch /tmp/kindle_board_firewall
         else
-            echo 'Cannot open the local receiver port'
-            exit 1
+            log 'Cannot open the local receiver port; local display remains available'
         fi
         "$BASE/bin/kindle-board" -data "$STATE" -hook "$BASE/display.sh" -listen ':8080' -ip "$IP" &
         echo $! > "$SERVER_PID"
