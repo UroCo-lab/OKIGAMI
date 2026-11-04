@@ -1,0 +1,33 @@
+name: Verify OKIGAMI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache-dependency-path: src/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: go -C src test ./...
+      - run: go -C src vet ./...
+      - run: node verify-crop.cjs && node verify-connection.cjs && node verify-caption-anchor.cjs
+      - run: find device vendor/custom-screensaver -name '*.sh' -print0 | xargs -0 -n1 sh -n
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache-dependency-path: src/go.sum
+      - name: Build Kindle and preview
+        shell: pwsh
+        run: ./build.ps1

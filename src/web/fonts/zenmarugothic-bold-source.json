@@ -1,0 +1,20 @@
+[
+  {
+    "name": "OFL.txt",
+    "size": 4402,
+    "sha": "7dc44f8017161dc4e1346b24cfd6e195c402633a",
+    "download_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/zenmarugothic/OFL.txt"
+  },
+  {
+    "name": "ZenMaruGothic-Bold.ttf",
+    "size": 3779008,
+    "sha": "aeaf890a35366fc7d08781886d2a04b85b5bec8c",
+    "download_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/zenmarugothic/ZenMaruGothic-Bold.ttf"
+  },
+  {
+    "name": "ZenMaruGothic-Regular.ttf",
+    "size": 3832756,
+    "sha": "c622402a1acf00c3481334de56439b3703cdcbb6",
+    "download_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/zenmarugothic/ZenMaruGothic-Regular.ttf"
+  }
+]

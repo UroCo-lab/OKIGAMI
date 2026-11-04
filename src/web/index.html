@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>OKIGAMI</title><style>
+@font-face{font-family:OkigamiGothic;src:url(/fonts/v1/gothic.ttf) format("truetype");font-weight:400;font-display:block}@font-face{font-family:OkigamiMincho;src:url(/fonts/v1/mincho.ttf) format("truetype");font-weight:400;font-display:block}
+@font-face{font-family:OkigamiGothic;src:url(/fonts/v1/gothic-bold.ttf) format("truetype");font-weight:700;font-display:block}@font-face{font-family:OkigamiMincho;src:url(/fonts/v1/mincho-bold.ttf) format("truetype");font-weight:700;font-display:block}@font-face{font-family:OkigamiRounded;src:url(/fonts/v1/rounded.ttf) format("truetype");font-weight:400;font-display:block}@font-face{font-family:OkigamiRounded;src:url(/fonts/v1/rounded-bold.ttf) format("truetype");font-weight:700;font-display:block}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;color:#182e25;background:#f3f5ef;font-synthesis:none;font-size:16px}
+*{box-sizing:border-box}body{margin:0;padding-bottom:150px}main{width:100%;max-width:600px;margin:auto;padding:16px 16px 24px;padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:34px;margin-bottom:16px}h1{font-size:23px;letter-spacing:-.7px;margin:0;white-space:nowrap}.badge{border-radius:20px;padding:7px 10px;background:#e2eadb;color:#36513d;font-size:11px;white-space:nowrap}
+button,input,textarea,select{font:inherit}button{min-height:46px;border:1px solid #d2ddcf;border-radius:11px;padding:11px 14px;background:#fff;color:#254b37;cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #7f9e72;outline-offset:3px}
+.tabs{display:flex;gap:4px;padding:4px;margin:0 0 14px;background:#e5ebdf;border-radius:14px}.tabs button{flex:1;min-height:46px;padding:9px;border:0;background:transparent;color:#61715f;font-weight:600}.tabs button.active{background:white;color:#244b39;box-shadow:0 2px 6px #29452b12}
+.card{min-width:0;background:#fff;border:1px solid #dce3d7;border-radius:17px;padding:18px;margin-bottom:14px}.preview-card{padding:14px}.preview-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.preview-head h2{font-size:13px;font-weight:600;margin:0}.preview-head .small{font-size:11px;margin:0}.preview-shell{display:flex;align-items:center;justify-content:center;padding:12px;border-radius:12px;background:#edf0e7}
+canvas{display:block;width:auto;height:auto;max-width:100%;max-height:320px;max-height:min(38svh,320px);background:#fff;box-shadow:0 3px 14px #2539271c}.orientation-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.orientation-row label{margin:0;font-size:13px;font-weight:500}.orientation-row select{width:132px;min-height:44px;padding:9px 12px}
+label{display:block;font-size:14px;font-weight:600;margin:18px 0 8px}.card>label:first-child,#text-panel>label:first-child,#image-panel>label:first-child{margin-top:0}input[type=text],textarea,select{display:block;width:100%;min-width:0;min-height:48px;border:1px solid #ccd7c7;border-radius:10px;padding:12px;background:#fff;color:#182e25;font-size:16px}textarea{min-height:150px;resize:vertical;line-height:1.65}input[type=file]{width:100%;max-width:100%;min-height:58px;border:1px dashed #aabd9e;border-radius:11px;padding:14px 10px;background:#f7f9f3;font-size:14px}input::file-selector-button{min-height:36px;margin-right:10px;border:1px solid #c9d4c3;border-radius:8px;padding:6px 10px;background:white;color:#294e39;font:inherit}
+.row{display:flex;gap:16px;align-items:center}.row>div{flex:1;min-width:0}input[type=range]{display:block;width:100%;height:40px;margin:0;accent-color:#2c563e}.check{display:flex;gap:10px;align-items:center;min-height:48px;margin:10px 0 0;font-size:14px;font-weight:400;line-height:1.5}.check input{width:21px;height:21px;margin:0;flex:0 0 auto;accent-color:#244b39}.small{font-size:12px;color:#6b786b;line-height:1.7;margin:10px 0 0}.small:empty{display:none}#fit-warning:not(:empty){color:#a03d2c}
+.send-bar{position:fixed;z-index:10;bottom:0;left:0;right:0;border-top:1px solid #dce3d7;background:#f3f5eff5;padding:10px max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}.send-inner{max-width:568px;margin:auto}.primary{width:100%;min-height:50px;background:#244b39;border-color:#244b39;color:white;font-weight:600}.secondary{width:100%;margin-top:8px;background:#fff}#status{color:#315c40;font-size:12px;line-height:1.6;margin:0 0 8px;overflow-wrap:anywhere}#status:empty{display:none}.error{color:#a03928!important}
+[hidden]{display:none!important}canvas.crop-ready{cursor:grab;touch-action:none;user-select:none}canvas.crop-dragging{cursor:grabbing}.range-ends{display:flex;justify-content:space-between;font-size:11px;color:#6b786e}#crop-controls{margin-top:16px;padding:0 14px 14px;border:1px solid #dce2d9;border-radius:12px;background:#f8faf4}#crop-reset{font-size:13px;min-height:44px;margin-top:12px}
+@media(max-width:370px){main{padding-left:12px;padding-right:12px}h1{font-size:21px}.badge{padding:6px 8px;font-size:10px}.card{padding:14px}.preview-card{padding:12px}.row{gap:10px}}
+#image-fit-field{margin:0 0 16px}#image-fit-field label{margin-top:0}.stepper{display:flex;align-items:center;gap:10px}.stepper input[type=range]{flex:1;min-width:0}.stepper button{flex:0 0 44px;width:44px;min-height:44px;padding:0;font-size:24px;line-height:1;touch-action:manipulation}.stepper button:disabled{opacity:.3}
+.anchor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.anchor-grid button{min-height:48px;font-weight:600}.anchor-grid button[aria-pressed=true]{background:#244b39;color:#fff;border-color:#244b39}
+</style></head><body><main>
+<header><h1>OKIGAMI</h1><span class="badge" id="connection">接続を確認中</span></header>
+<div class="tabs" role="tablist" aria-label="表示する内容"><button class="active" id="text-tab" type="button" role="tab" aria-selected="true" aria-controls="text-panel">文字</button><button id="image-tab" type="button" role="tab" aria-selected="false" aria-controls="image-panel">画像</button></div>
+<section class="card preview-card" aria-label="表示プレビュー"><div class="orientation-row"><label for="orientation">表示の向き</label><select id="orientation"><option value="portrait">縦表示</option><option value="landscape">横表示</option></select></div><div id="image-fit-field" hidden><label for="image-fit">画像の収め方</label><select id="image-fit"><option value="contain">画像全体を表示</option><option value="cover">画面いっぱいに表示（周辺を切り抜く）</option></select></div><div class="preview-head"><h2>表示プレビュー</h2><span class="small" id="dimensions">縦 · 1072 × 1448</span></div><div class="preview-shell"><canvas id="preview" width="1072" height="1448" role="img" aria-label="Kindleに表示する内容のプレビュー"></canvas></div><p class="small" id="crop-help" hidden>画像を指で動かして、表示する位置を調整できます。</p><p class="small" id="fit-warning"></p><div id="crop-controls" hidden><label for="crop-x">左右の位置</label><div class="stepper"><button id="crop-x-minus" type="button" aria-label="画像の左側を多く表示" data-step-target="crop-x" data-step="-5">−</button><input id="crop-x" type="range" min="0" max="100" step="0.1" value="50"><button id="crop-x-plus" type="button" aria-label="画像の右側を多く表示" data-step-target="crop-x" data-step="5">＋</button></div><div class="range-ends"><span>左側を表示</span><span>右側を表示</span></div><label for="crop-y">上下の位置</label><div class="stepper"><button id="crop-y-minus" type="button" aria-label="画像の上側を多く表示" data-step-target="crop-y" data-step="-5">−</button><input id="crop-y" type="range" min="0" max="100" step="0.1" value="50"><button id="crop-y-plus" type="button" aria-label="画像の下側を多く表示" data-step-target="crop-y" data-step="5">＋</button></div><div class="range-ends"><span>上側を表示</span><span>下側を表示</span></div><button id="crop-reset" type="button">中央に戻す</button><p class="small" id="crop-note">画像を選ぶと、切り抜く位置を調整できます。</p></div></section>
+<section class="card editor-card" aria-label="内容の編集"><div id="text-panel" role="tabpanel" aria-labelledby="text-tab"><label for="title">見出し（任意）</label><input id="title" type="text" maxlength="80" placeholder="今日のお知らせ"><label for="message">表示する文字</label><textarea id="message" maxlength="3000" placeholder="ここにメモや予定を入力">おかえりなさい。
+今日も、よい一日を。</textarea><label for="text-font">フォント</label><select id="text-font"><option value="system">標準</option><option value="gothic">ゴシック（BIZ UD）</option><option value="mincho">明朝（BIZ UD）</option><option value="rounded">丸ゴシック（Zen Maru）</option></select><label class="check"><input type="checkbox" id="text-bold">太字にする</label><div><label for="font-size">文字サイズ <span id="font-label">64</span></label><div class="stepper"><button id="font-size-minus" type="button" aria-label="文字サイズを小さく" data-step-target="font-size" data-step="-1">−</button><input id="font-size" type="range" min="28" max="120" value="64" step="2"><button id="font-size-plus" type="button" aria-label="文字サイズを大きく" data-step-target="font-size" data-step="1">＋</button></div></div><label for="text-line-height">行間 <span id="text-line-height-label">1.65</span></label><div class="stepper"><button id="text-line-height-minus" type="button" aria-label="行間を狭く" data-step-target="text-line-height" data-step="-1">−</button><input id="text-line-height" type="range" min="100" max="240" step="5" value="165"><button id="text-line-height-plus" type="button" aria-label="行間を広く" data-step-target="text-line-height" data-step="1">＋</button></div><div><label for="align">配置</label><select id="align"><option value="left">左揃え</option><option value="center">中央揃え</option></select></div><label for="text-outline">文字の縁取りの太さ <span id="text-outline-label">0</span></label><div class="stepper"><button id="text-outline-minus" type="button" aria-label="文字の縁取りの太さを減らす" data-step-target="text-outline" data-step="-1">−</button><input id="text-outline" type="range" min="0" max="12" value="0" step="1"><button id="text-outline-plus" type="button" aria-label="文字の縁取りの太さを増やす" data-step-target="text-outline" data-step="1">＋</button></div><label class="check"><input type="checkbox" id="text-invert">白黒反転（黒背景・白文字）</label><label class="check"><input type="checkbox" id="vertical-center" checked>画面の中央に配置する</label></div>
+<div id="image-panel" role="tabpanel" aria-labelledby="image-tab" hidden><label for="image-file">この端末から画像を選択</label><input id="image-file" type="file" accept="image/*"><label class="check"><input type="checkbox" id="dither">写真の階調を細かい点で表現する</label><label for="caption">画像に添える文字（任意）</label><textarea id="caption" maxlength="3000" rows="4" placeholder="ひとことメモ&#10;改行して入力できます"></textarea><label for="caption-font">添える文字のフォント</label><select id="caption-font"><option value="system">標準</option><option value="gothic">ゴシック（BIZ UD）</option><option value="mincho">明朝（BIZ UD）</option><option value="rounded">丸ゴシック（Zen Maru）</option></select><label class="check"><input type="checkbox" id="caption-bold">添える文字を太字にする</label><label for="caption-size">添える文字のサイズ <span id="caption-size-label">40</span></label><div class="stepper"><button id="caption-size-minus" type="button" aria-label="添える文字を小さく" data-step-target="caption-size" data-step="-1">−</button><input id="caption-size" type="range" min="28" max="120" value="40" step="2"><button id="caption-size-plus" type="button" aria-label="添える文字を大きく" data-step-target="caption-size" data-step="1">＋</button></div><label for="caption-line-height">添える文字の行間 <span id="caption-line-height-label">1.60</span></label><div class="stepper"><button id="caption-line-height-minus" type="button" aria-label="添える文字の行間を狭く" data-step-target="caption-line-height" data-step="-1">−</button><input id="caption-line-height" type="range" min="100" max="240" step="5" value="160"><button id="caption-line-height-plus" type="button" aria-label="添える文字の行間を広く" data-step-target="caption-line-height" data-step="1">＋</button></div><label for="caption-layout">文字の載せ方</label><select id="caption-layout"><option value="band">余白帯に置く</option><option value="overlay">写真に重ねる</option></select><label>添える文字の位置</label><input id="caption-anchor" type="hidden" value="8"><div class="anchor-grid" role="group" aria-label="添える文字の位置"><button type="button" data-caption-anchor="1" aria-label="1 左上" aria-pressed="false">1</button><button type="button" data-caption-anchor="2" aria-label="2 上中央" aria-pressed="false">2</button><button type="button" data-caption-anchor="3" aria-label="3 右上" aria-pressed="false">3</button><button type="button" data-caption-anchor="4" aria-label="4 左中央" aria-pressed="false">4</button><button type="button" data-caption-anchor="5" aria-label="5 中央" aria-pressed="false">5</button><button type="button" data-caption-anchor="6" aria-label="6 右中央" aria-pressed="false">6</button><button type="button" data-caption-anchor="7" aria-label="7 左下" aria-pressed="false">7</button><button type="button" data-caption-anchor="8" aria-label="8 下中央" aria-pressed="true">8</button><button type="button" data-caption-anchor="9" aria-label="9 右下" aria-pressed="false">9</button></div><label for="caption-outline">添える文字の縁取りの太さ <span id="caption-outline-label">0</span></label><div class="stepper"><button id="caption-outline-minus" type="button" aria-label="添える文字の縁取りの太さを減らす" data-step-target="caption-outline" data-step="-1">−</button><input id="caption-outline" type="range" min="0" max="12" value="0" step="1"><button id="caption-outline-plus" type="button" aria-label="添える文字の縁取りの太さを増やす" data-step-target="caption-outline" data-step="1">＋</button></div><p class="small">黒文字には白、白文字には黒の縁取りを付けます。0で縁取りなし。</p><label class="check"><input type="checkbox" id="caption-invert"><span id="caption-invert-label">白黒反転（黒背景・白文字）</span></label><div id="caption-padding-field"><label for="caption-padding">余白帯の上下幅 <span id="caption-padding-label">35</span></label><div class="stepper"><button id="caption-padding-minus" type="button" aria-label="余白帯の上下幅を減らす" data-step-target="caption-padding" data-step="-1">−</button><input id="caption-padding" type="range" min="0" max="160" value="35" step="1"><button id="caption-padding-plus" type="button" aria-label="余白帯の上下幅を増やす" data-step-target="caption-padding" data-step="1">＋</button></div></div></div></section>
+<section class="card settings-card" aria-label="自動スリープ設定"><label for="sleep-after">自動スリープ</label><select id="sleep-after"><option value="0">Kindle標準</option><option value="5">5秒</option><option value="30">30秒</option><option value="60">1分</option><option value="180">3分</option><option value="300">5分</option></select><p class="small">最後の操作からの待ち時間です。編集中は延長されます。</p></section>
+</main><footer class="send-bar" id="send-bar"><div class="send-inner"><div id="status" role="status" aria-live="polite"></div><button class="primary" id="send" disabled>Kindleに表示する</button></div></footer><script>
+'use strict';
+const $=id=>document.getElementById(id), canvas=$('preview'),ctx=canvas.getContext('2d',{willReadFrequently:true}),rawCanvas=document.createElement('canvas'),rawCtx=rawCanvas.getContext('2d');
+let token=location.hash.slice(1),mode='text',loadedImage=null,ready=false,busy=false,overflow=false,previewMode=false,fontsBusy=false;
+let connectionQRImage=null;
+let cropX=.5,cropY=.5,imagePlacement=null,cropDrag=null,cropRenderTick=null;
+// Token stays in the URL fragment; it is sent only in authenticated API headers.
+let baseW=1072,baseH=1448,W=1072,H=1448,deviceStatus={wifi:false,wifiBars:-1,battery:-1,charging:false};
+function orient(){const landscape=$('orientation').value==='landscape';W=landscape?baseH:baseW;H=landscape?baseW:baseH;canvas.width=W;canvas.height=H;$('dimensions').textContent=`${landscape?'横':'縦'} · ${W} × ${H}`;render()}
+$('orientation').onchange=orient;
+function status(text,error=false){$('status').textContent=text;$('status').classList.toggle('error',error)}
+function controls(){$('sleep-after').disabled=!ready||busy;syncSteppers(); $('send').disabled=!ready||busy||fontsBusy||!selectedFontReady()||overflow||(mode==='image'&&!loadedImage);$('send').setAttribute('aria-busy',String(busy)) }
+function syncSteppers(){for(const id of ['font-size','caption-size','text-outline','caption-outline','caption-padding','text-line-height','caption-line-height','crop-x','crop-y']){const input=$(id);$(id+'-minus').disabled=input.disabled||+input.value<=+input.min;$(id+'-plus').disabled=input.disabled||+input.value>=+input.max}}
+for(const button of document.querySelectorAll('[data-step-target]'))button.onclick=()=>{const input=$(button.dataset.stepTarget);if(input.disabled)return;input.stepUp(+button.dataset.step);input.dispatchEvent(new Event('input',{bubbles:true}));syncSteppers()};
+const fontFamilies={system:'system-ui,"Noto Sans JP",sans-serif',gothic:'"OkigamiGothic",sans-serif',mincho:'"OkigamiMincho",serif',rounded:'"OkigamiRounded",sans-serif'},loadedFonts=new Set(['system:400','system:700']),fontLoads=new Map();
+let fontJob=0;
+function selectedFontKeys(){const prefix=mode==='text'?'text':'caption',family=$(prefix+'-font').value,keys=[family+':'+($(prefix+'-bold').checked?'700':'400')];if(mode==='text'&&$('title').value)keys.push(family+':700');return [...new Set(keys)]}
+function selectedFontReady(){return selectedFontKeys().every(key=>loadedFonts.has(key))}
+function font(px,bold=false,family='system-ui,"Noto Sans JP",sans-serif'){return `${bold?'600':'400'} ${px}px ${family}`}
+function contentFont(px,bold=false,prefix='text'){return `${bold||$(prefix+'-bold').checked?'700':'400'} ${px}px ${fontFamilies[$(prefix+'-font').value]}`}
+function drawContentText(text,x,y,ink,outline){ctx.lineJoin='round';ctx.miterLimit=2;if(outline>0){ctx.lineWidth=outline*2;ctx.strokeStyle=ink==='#fff'?'#000':'#fff';ctx.strokeText(text,x,y)}ctx.fillStyle=ink;ctx.fillText(text,x,y)}
+function loadFontKey(key){
+ if(loadedFonts.has(key))return Promise.resolve();if(fontLoads.has(key))return fontLoads.get(key);
+ const [family,weight]=key.split(':');let timeout;
+ const job=Promise.race([document.fonts.load(`${weight} 64px ${fontFamilies[family]}`,'あ亜ABC'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('フォントの読み込みがタイムアウトしました。Kindleを起こして選び直してください。')),30000)})]).then(faces=>{if(!faces.length)throw new Error('フォントを読み込めませんでした。');loadedFonts.add(key)}).finally(()=>{clearTimeout(timeout);fontLoads.delete(key)});
+ fontLoads.set(key,job);return job;
+}
+async function ensureSelectedFont(){
+ const job=++fontJob,keys=selectedFontKeys();if(keys.every(key=>loadedFonts.has(key))){fontsBusy=false;controls();return}
+ fontsBusy=true;controls();status('フォントを読み込んでいます…');noteBrowserActivity();
+ const keepEditing=setInterval(()=>{if(job===fontJob)noteBrowserActivity()},1000);
+ try{await Promise.all(keys.map(loadFontKey));if(job===fontJob)status('')}
+ catch(e){if(job===fontJob)status(e.message,true)}
+ finally{clearInterval(keepEditing);if(job===fontJob){fontsBusy=false;render()}}
+}
+for(const id of ['text-font','caption-font','text-bold','caption-bold'])$(id).onchange=()=>{render();ensureSelectedFont()};
+$('title').addEventListener('input',()=>{if(!selectedFontReady())ensureSelectedFont()});
+function wrapped(text,maxWidth){const lines=[];for(const paragraph of text.split('\n')){let line='';for(const ch of paragraph){if(line&&ctx.measureText(line+ch).width>maxWidth){lines.push(line);line=ch}else{line+=ch}}lines.push(line)}return lines}
+function roundBox(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function drawDeviceOverlay(){
+ if(connectionQRImage){ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(connectionQRImage,20,H-212,192,192);ctx.restore()}
+ const left=W-300,y=H-108;ctx.lineWidth=2;
+ for(let i=0;i<3;i++)roundBox(left+i*96+1,y+1,86,86,13,'#fff','#999');
+ const cx=left+44,cy=y+58;
+ for(let i=0;i<3;i++){ctx.strokeStyle=deviceStatus.wifi&&deviceStatus.wifiBars>i?'#000':'#ccc';ctx.lineWidth=4;ctx.beginPath();ctx.arc(cx,cy,[12,23,34][i],Math.PI*1.25,Math.PI*1.75);ctx.stroke()}
+ ctx.fillStyle='#000';ctx.beginPath();ctx.arc(cx,cy,4,0,Math.PI*2);ctx.fill();
+ if(!deviceStatus.wifi){ctx.strokeStyle='#000';ctx.beginPath();ctx.moveTo(left+18,y+16);ctx.lineTo(left+70,y+72);ctx.stroke()}
+ const bx=left+105,by=y+25,battery=Number.isFinite(deviceStatus.battery)?deviceStatus.battery:-1;
+ ctx.lineWidth=3;roundBox(bx,by,64,38,7,'#fff','#000');roundBox(bx+66,by+12,5,14,2,'#000');
+ const level=Math.max(0,Math.min(100,battery)),cut=bx+5+54*level/100;
+ ctx.save();ctx.beginPath();ctx.roundRect(bx+5,by+5,54,28,2);ctx.clip();ctx.fillStyle='#000';ctx.fillRect(bx+5,by+5,54*level/100,28);ctx.restore();
+ const label=battery>=0?String(level):'-',textX=bx+32,textY=by+19;
+ ctx.font=font(23,true);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(label,textX,textY);
+ ctx.save();ctx.beginPath();ctx.rect(bx+5,by+5,Math.max(0,cut-bx-5),28);ctx.clip();ctx.fillStyle='#fff';ctx.fillText(label,textX,textY);ctx.restore();
+ if(deviceStatus.charging){const x=left+140,z=y+70;ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+3,z-3);ctx.lineTo(x-4,z+3);ctx.lineTo(x+4,z+3);ctx.lineTo(x-3,z+9);ctx.stroke()}
+ ctx.strokeStyle='#000';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(left+217,y+25);ctx.lineTo(left+255,y+63);ctx.moveTo(left+255,y+25);ctx.lineTo(left+217,y+63);ctx.stroke();
+}
+const clampUnit=value=>Math.max(0,Math.min(1,value));
+function coverPlacement(iw,ih,bw,bh,x,y){const ratio=Math.max(bw/iw,bh/ih),dw=iw*ratio,dh=ih*ratio,overflowX=Math.max(0,dw-bw),overflowY=Math.max(0,dh-bh);return{dw,dh,overflowX,overflowY,x:-overflowX*clampUnit(x),y:-overflowY*clampUnit(y),areaH:bh}}
+function updateCropControls(){
+ const cover=mode==='image'&&$('image-fit').value==='cover',can=cover&&loadedImage&&imagePlacement;
+ const moveX=!!can&&imagePlacement.overflowX>.5,moveY=!!can&&imagePlacement.overflowY>.5;
+ $('crop-controls').hidden=!cover;$('crop-x').disabled=!moveX;$('crop-y').disabled=!moveY;
+ $('crop-x').value=String(Math.round(cropX*1000)/10);$('crop-y').value=String(Math.round(cropY*1000)/10);
+ $('crop-reset').disabled=!can||(cropX===.5&&cropY===.5);
+ $('crop-note').textContent=!loadedImage?'画像を選ぶと、切り抜く位置を調整できます。':(moveX||moveY?'はみ出している方向の位置を調整できます。':'この画像は切り抜きがないため、位置調整は不要です。');
+ canvas.classList.toggle('crop-ready',moveX||moveY);$('crop-help').hidden=!(moveX||moveY);
+}
+function queueCropRender(){if(cropRenderTick===null)cropRenderTick=requestAnimationFrame(()=>{cropRenderTick=null;render()})}
+function flushCropRender(){if(cropRenderTick!==null){cancelAnimationFrame(cropRenderTick);cropRenderTick=null;render()}}
+for(const axis of ['x','y'])$('crop-'+axis).addEventListener('input',()=>{if(axis==='x')cropX=+$('crop-x').value/100;else cropY=+$('crop-y').value/100;queueCropRender()});
+$('crop-reset').onclick=()=>{cropX=cropY=.5;render()};
+canvas.addEventListener('pointerdown',e=>{
+ if(!e.isPrimary||e.button!==0||!canvas.classList.contains('crop-ready')||cropDrag)return;
+ const rect=canvas.getBoundingClientRect(),localY=(e.clientY-rect.top)*H/rect.height,imageY=imagePlacement.areaY||0;if(localY<imageY||localY>=imageY+imagePlacement.areaH)return;if(imagePlacement.excludedBand&&localY>=imagePlacement.excludedBand.top&&localY<imagePlacement.excludedBand.bottom)return;
+ e.preventDefault();cropDrag={id:e.pointerId,x:e.clientX,y:e.clientY,focusX:cropX,focusY:cropY,scaleX:W/rect.width,scaleY:H/rect.height,overflowX:imagePlacement.overflowX,overflowY:imagePlacement.overflowY};
+ canvas.setPointerCapture(e.pointerId);canvas.classList.add('crop-dragging');
+});
+canvas.addEventListener('pointermove',e=>{
+ if(!cropDrag||cropDrag.id!==e.pointerId)return;e.preventDefault();
+ if(cropDrag.overflowX>.5)cropX=clampUnit(cropDrag.focusX-(e.clientX-cropDrag.x)*cropDrag.scaleX/cropDrag.overflowX);
+ if(cropDrag.overflowY>.5)cropY=clampUnit(cropDrag.focusY-(e.clientY-cropDrag.y)*cropDrag.scaleY/cropDrag.overflowY);
+ queueCropRender();noteBrowserActivity();
+});
+function finishCropDrag(e){if(!cropDrag||cropDrag.id!==e.pointerId)return;cropDrag=null;canvas.classList.remove('crop-dragging');if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);flushCropRender()}
+for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,finishCropDrag);
+function quantize(context,dither){const pixels=context.getImageData(0,0,W,H),p=pixels.data,matrix=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4;let v=.2126*p[i]+.7152*p[i+1]+.0722*p[i+2];if(dither)v+=(matrix[(y%4)*4+x%4]-7.5)*1.9;v=Math.max(0,Math.min(255,Math.round(v/17)*17));p[i]=p[i+1]=p[i+2]=v;p[i+3]=255}context.putImageData(pixels,0,0)}
+function captionAnchor(value,w,h,textH,overlay,padding,bandH){
+ const index=Math.max(1,Math.min(9,Math.round(value)||8))-1,row=Math.floor(index/3),col=index%3,bandY=row===0?0:(row===1?Math.max(0,(h-bandH)/2):Math.max(0,h-bandH));
+ return{row,col,align:['left','center','right'][col],x:col===0?80:(col===1?w/2:w-80),bandY,y:overlay?(row===0?35:(row===1?(h-textH)/2:h-35-textH)):bandY+padding};
+}
+function captionPhotoZones(h,bandY,bandH){
+ if(bandH<=0)return[{screenY:0,virtualY:0,height:h}];
+ const remaining=Math.max(0,h-bandH),split=Math.min(remaining,Math.max(0,bandY));
+ return[{screenY:0,virtualY:0,height:split},{screenY:split+bandH,virtualY:split,height:remaining-split}].filter(zone=>zone.height>0);
+}
+const anchorButtons=document.querySelectorAll('[data-caption-anchor]');
+for(const button of anchorButtons)button.onclick=()=>{$('caption-anchor').value=button.dataset.captionAnchor;for(const item of anchorButtons)item.setAttribute('aria-pressed',String(item===button));render()};
+function render(){
+ for(const id of ['caption-size','text-outline','caption-outline','caption-padding'])$(id+'-label').textContent=$(id).value;for(const prefix of ['text','caption'])$(prefix+'-line-height-label').textContent=(+$(prefix+'-line-height').value/100).toFixed(2);
+ const inverted=$('text-invert').checked,background=mode==='text'&&inverted?'#000':'#fff';
+ const overlay=$('caption-layout').value==='overlay';$('caption-padding-field').hidden=overlay;$('caption-invert-label').textContent=overlay?'白文字にする':'白黒反転（黒背景・白文字）';
+ imagePlacement=null;ctx.fillStyle=background;ctx.fillRect(0,0,W,H);overflow=false;let warning='';const margin=80,contentW=W-margin*2,contentH=H;
+ if(mode==='text'){
+  const size=+$('font-size').value,outline=+$('text-outline').value,ink=inverted?'#fff':'#000';$('font-label').textContent=size;
+  ctx.font=contentFont(size);const lines=wrapped($('message').value.replace(/\r/g,''),contentW),lineH=size*+$('text-line-height').value/100;
+  ctx.font=contentFont(48,true);const titles=$('title').value?wrapped($('title').value,contentW):[],titleLineH=48*+$('text-line-height').value/100,titleH=titles.length?titles.length*titleLineH+64:0;
+  const total=titleH+lines.length*lineH;overflow=total>contentH-margin*2;let y=$('vertical-center').checked?Math.max(margin,(contentH-total)/2):margin;
+  const centered=$('align').value==='center',x=centered?W/2:margin;ctx.textBaseline='top';ctx.textAlign=centered?'center':'left';
+  ctx.font=contentFont(48,true);for(const line of titles){drawContentText(line,x,y,ink,outline);y+=titleLineH}if(titles.length)y+=64;
+  ctx.font=contentFont(size);for(const line of lines){drawContentText(line,x,y,ink,outline);y+=lineH}
+  if(overflow)warning='文字が画面を超えています。文字を減らすか、サイズを小さくしてください。';
+ }else if(loadedImage){
+  const cap=$('caption').value,size=+$('caption-size').value,outline=+$('caption-outline').value,lineH=size*+$('caption-line-height').value/100,padding=+$('caption-padding').value,white=$('caption-invert').checked,ink=white?'#fff':'#000';
+  ctx.font=contentFont(size,false,'caption');const capLines=cap?wrapped(cap.replace(/\r/g,''),contentW):[],textH=capLines.length*lineH,capH=capLines.length&&!overlay?textH+padding*2:0;
+  const areaH=Math.max(0,contentH-capH),anchor=captionAnchor(+$('caption-anchor').value,W,H,textH,overlay,padding,capH),cover=$('image-fit').value==='cover';let placement;
+  if(cover){placement=coverPlacement(loadedImage.width,loadedImage.height,W,areaH,cropX,cropY);placement.areaY=0;placement.areaH=H;placement.excludedBand=capH?{top:anchor.bandY,bottom:anchor.bandY+capH}:null;imagePlacement=placement}
+  else{const ratio=Math.min(W/loadedImage.width,areaH/loadedImage.height),dw=loadedImage.width*ratio,dh=loadedImage.height*ratio;placement={x:(W-dw)/2,y:(areaH-dh)/2,dw,dh}}
+  for(const zone of captionPhotoZones(contentH,anchor.bandY,capH)){ctx.save();ctx.beginPath();ctx.rect(0,zone.screenY,W,zone.height);ctx.clip();ctx.drawImage(loadedImage,placement.x,placement.y+zone.screenY-zone.virtualY,placement.dw,placement.dh);ctx.restore()}
+  if(capH){ctx.fillStyle=white?'#000':'#fff';ctx.fillRect(0,anchor.bandY,W,capH)}
+  const align=anchor.align,textX=anchor.x,textY=anchor.y;
+  ctx.font=contentFont(size,false,'caption');ctx.textAlign=align;ctx.textBaseline='top';capLines.forEach((line,i)=>drawContentText(line,textX,textY+i*lineH,ink,outline));
+  if(capH>=contentH||(overlay&&textH+70>contentH)){overflow=true;warning='添える文字が画面を超えています。文字・余白を減らすか、サイズを小さくしてください。'}
+ }else{ctx.fillStyle='#111';ctx.font=font(42);ctx.textAlign='center';ctx.fillText('画像を選択してください',W/2,contentH/2)}
+ if(mode==='image')quantize(ctx,$('dither').checked);rawCanvas.width=W;rawCanvas.height=H;rawCtx.drawImage(canvas,0,0);drawDeviceOverlay();quantize(ctx,false);$('fit-warning').textContent=warning;updateCropControls();controls();
+}
+function tab(next){mode=next;$('image-fit-field').hidden=next!=='image';$('text-panel').hidden=next!=='text';$('image-panel').hidden=next!=='image';$('text-tab').classList.toggle('active',next==='text');$('image-tab').classList.toggle('active',next==='image');$('text-tab').setAttribute('aria-selected',String(next==='text'));$('image-tab').setAttribute('aria-selected',String(next==='image'));render();ensureSelectedFont()}
+$('text-tab').onclick=()=>tab('text');$('image-tab').onclick=()=>tab('image');
+for(const mode of ['text','image'])$(mode+'-tab').onkeydown=e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();const next=mode==='text'?'image':'text';tab(next);$(next+'-tab').focus()}};
+for(const id of ['title','message','font-size','align','vertical-center','image-fit','caption','caption-size','caption-layout','caption-padding','caption-outline','caption-invert','text-outline','text-invert','text-line-height','caption-line-height','dither'])$(id).addEventListener('input',render);
+$('image-file').onchange=async()=>{const f=$('image-file').files[0];if(!f)return;if(f.size>30*1024*1024){status('30MB以下の画像を選択してください。',true);return}const url=URL.createObjectURL(f),img=new Image();try{await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});loadedImage=img;cropX=cropY=.5;status('画像を読み込みました。');render()}catch{status('この画像を読み込めませんでした。JPEGやPNGを試してください。',true)}finally{URL.revokeObjectURL(url)}};
+async function api(path,options={}){const {timeoutMs=45000,...request}=options;const response=await fetch(path,{...request,headers:{...request.headers,'X-Board-Token':token},cache:'no-store',signal:AbortSignal.timeout(timeoutMs)});if(!response.ok){const error=new Error(await response.text());error.status=response.status;throw error}return response}
+async function loadConnectionQR(){const response=await api('/api/connection-qr'),blob=await response.blob(),url=URL.createObjectURL(blob),image=new Image();try{await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url});connectionQRImage=image}finally{URL.revokeObjectURL(url)}}
+$('send').onclick=async()=>{if(!ready||busy||fontsBusy||!selectedFontReady()||overflow)return;flushCropRender();busy=true;controls();status('Kindleへ送信しています…');try{const blob=await new Promise(resolve=>rawCanvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('画像を作成できませんでした。');await api('/api/frame',{method:'POST',body:blob,headers:{'Content-Type':'image/png'}});status(previewMode?'PCプレビューに保存しました。実機には送信していません。':'Kindleに表示しました。')}catch(e){status('送信できませんでした。Kindleが受信モードか確認してください。 '+e.message,true)}finally{busy=false;controls()}};
+let activityTimer=null,lastActivityPost=0;
+function noteBrowserActivity(){if(!ready||document.hidden)return;if(activityTimer!==null)clearTimeout(activityTimer);const wait=Math.max(0,1000-(Date.now()-lastActivityPost));activityTimer=setTimeout(async()=>{activityTimer=null;if(!ready||document.hidden)return;lastActivityPost=Date.now();try{await api('/api/activity',{method:'POST'})}catch{}},wait)}
+for(const event of ['input','change','pointerdown','keydown'])document.addEventListener(event,noteBrowserActivity,{passive:true});
+$('sleep-after').onchange=async()=>{if(!ready)return;busy=true;controls();try{await api('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sleepAfterSeconds:+$('sleep-after').value})});status($('sleep-after').value==='0'?'Kindle標準のスリープ時間にしました。':'操作を止めてから'+$('sleep-after').selectedOptions[0].textContent+'でスリープします。')}catch(e){status(e.message,true)}finally{busy=false;controls()}};
+let checkingConnection=false,invalidConnectionToken=false,connectionInitialized=false;
+function connectionUnavailable(sleeping=false){ready=false;controls();$('connection').textContent=sleeping?'スリープ中':'接続待ち';status('Kindleの電源ボタンで起こすと、自動で再接続します。')}
+async function syncConnection(initial=false){
+ if(checkingConnection||invalidConnectionToken||busy||document.hidden||!token)return;
+ checkingConnection=true;initial=initial||!connectionInitialized;
+ try{
+  const c=await(await api('/api/config',{timeoutMs:3000})).json(),wasReady=ready;
+  if(initial){baseW=c.width;baseH=c.height;previewMode=c.preview;$('orientation').value=c.landscape?'landscape':'portrait';await loadConnectionQR();connectionInitialized=true}
+  ready=!c.sleeping;$('sleep-after').value=String(c.sleepAfterSeconds||0);
+  const changed=JSON.stringify(c.status)!==JSON.stringify(deviceStatus);deviceStatus=c.status||deviceStatus;
+  if(initial)orient();else if(changed||wasReady!==ready)render();
+  controls();
+  if(!ready){connectionUnavailable(true);return}
+  $('connection').textContent=previewMode?'PCプレビュー':'Kindleに接続済み';
+  if(initial||!wasReady)status(previewMode?'PCプレビューです。実機には送信しません。':(initial?'':'再接続しました。'));
+ }catch(e){
+  if(e.status===401){invalidConnectionToken=true;ready=false;controls();$('connection').textContent='QRを読み直してください';status('Kindleの左下のQRを読み直してください。',true)}
+  else connectionUnavailable();
+ }finally{checkingConnection=false}
+}
+async function init(){await document.fonts.ready;render();if(!token){$('connection').textContent='QRを読み込んで接続';status('Kindleの接続QRからこの画面を開いてください。送信には接続が必要です。');return}await syncConnection(true);if(ready)noteBrowserActivity()}
+async function pollConnection(){await syncConnection();setTimeout(pollConnection,2000)}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncConnection()});
+window.addEventListener('hashchange',()=>location.reload());
+if('ResizeObserver'in window)new ResizeObserver(()=>{document.body.style.paddingBottom=($('send-bar').getBoundingClientRect().height+20)+'px'}).observe($('send-bar'));
+init().finally(()=>setTimeout(pollConnection,2000));
+</script></body></html>

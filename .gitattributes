@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.ttf binary
+*.png binary
+vendor/custom-screensaver/bin/* binary
+src/web/index.html -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/web/fonts/*-OFL.txt -text -whitespace

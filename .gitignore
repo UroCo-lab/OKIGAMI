@@ -1,0 +1,9 @@
+/dist/
+/release/
+/preview-state/
+/state/
+*.exe
+*.log
+__pycache__/
+.DS_Store
+Thumbs.db
