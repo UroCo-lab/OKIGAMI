@@ -8,6 +8,12 @@ An on-device, standalone e-paper noticeboard for a jailbroken Kindle. Scan its Q
 
 [最新版をダウンロード](https://github.com/UroCo-lab/OKIGAMI/releases/latest) · [使い方](docs/usage.md) · [ビルド](docs/build.md) · [検証状況](docs/verification.md) · [ライセンスと出典](THIRD_PARTY_NOTICES.md)
 
+## AIと導入や改編を始める
+
+[プロジェクト添付用ガイドをダウンロード](https://raw.githubusercontent.com/UroCo-lab/OKIGAMI/main/docs/OKIGAMI-PROJECT.md)して、AIアシスタントのプロジェクトやチャットに添付してください。リンク先が本文表示になる場合は、`OKIGAMI-PROJECT.md` という名前で保存します。
+
+ガイド内の依頼文とGitHub URLまたは配布ZIPを渡すと、導入から好みに合わせた改編、自分のGitHubへの反映まで相談できます。改編するファイルの案内、ビルド・検証手順も含みます。実際の操作にはファイル・端末・GitHubを扱える環境が必要です。[ガイドを読む](docs/OKIGAMI-PROJECT.md)。
+
 ## できること
 
 - 文字／画像を切り替え、プレビューを見ながら送信。縦・横表示に対応。
